@@ -1,15 +1,25 @@
-/**
- * Welcome to Cloudflare Workers! This is your first worker.
- *
- * - Run `npm run dev` in your terminal to start a development server
- * - Open a browser tab at http://localhost:8787/ to see your worker in action
- * - Run `npm run deploy` to publish your worker
- *
- * Learn more at https://developers.cloudflare.com/workers/
- */
-
 export default {
-	async fetch(request, env, ctx) {
-		return new Response('Hello World!');
-	},
+  async fetch(request, env) {
+    let url = new URL(request.url);
+    let objectKey = url.pathname.slice(1);
+
+    if (!objectKey) {
+      return new Response("R2 Assets Worker", { status: 400 });
+    }
+
+    try {
+      let object = await env.R2_BUCKET.get(objectKey);
+      if (object === null) {
+        return new Response("Not Found", { status: 404 });
+      }
+
+      let headers = new Headers();
+      object.writeHttpMetadata(headers);
+      headers.set("etag", object.httpEtag);
+
+      return new Response(object.body, { headers });
+    } catch (err) {
+      return new Response("Error: " + err.message, { status: 500 });
+    }
+  },
 };
