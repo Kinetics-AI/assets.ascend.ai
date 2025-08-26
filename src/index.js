@@ -14,7 +14,7 @@ export default {
     }
 
     try {
-      const object = await env.R2_BUCKET.get(objectKey);
+      const object = await env.MY_BUCKET.get(objectKey);
       if (object === null) {
         return new Response("Not Found", { status: 404 });
       }

@@ -9,8 +9,14 @@
 	"compatibility_date": "2025-08-26",
 	"observability": {
 		"enabled": true
-	}
-	/**
+	},
+	"r2_buckets": [
+		{
+		"binding": "MY_BUCKET",
+		"bucket_name": "ascendai"
+		}
+	]	
+  	/**
 	 * Smart Placement
 	 * Docs: https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
 	 */
